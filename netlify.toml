@@ -1,2 +1,3 @@
 [build]
-command = "hng build --prod"
+publish = "dist"
+command = "ng build --prod"
