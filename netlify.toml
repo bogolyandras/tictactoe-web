@@ -1,3 +1,3 @@
 [build]
-publish = "dist"
+publish = "dist/tictactoe"
 command = "ng build --prod"
