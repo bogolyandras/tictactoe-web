@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {Field} from '../../logic/board';
+import {Field} from '../../logic/field';
+
 
 @Component({
   selector: 'app-field',

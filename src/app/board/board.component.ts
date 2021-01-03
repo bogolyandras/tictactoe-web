@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {Board, Field} from '../../logic/board';
+import {Board} from '../../logic/board';
 import {FieldClickEvent} from '../field/field.component';
+import {Field} from '../../logic/field';
 
 @Component({
   selector: 'app-board',

@@ -1,11 +1,4 @@
-
-export enum Field {
-
-  Cross,
-  Naught,
-  Empty
-
-}
+import {Field, FieldMeta} from './field';
 
 export class Board {
 
@@ -13,19 +6,31 @@ export class Board {
   readonly sizeY: number;
 
   fields: Field[];
+  fieldMetas: FieldMeta[];
 
   constructor(sizeX: number, sizeY: number) {
+
+    const numberOfFields = sizeX * sizeY;
+
     this.sizeX = sizeX;
     this.sizeY = sizeY;
-    const numberOfFields = sizeX * sizeY;
-    this.fields = [numberOfFields];
+
+    this.fields = [];
+    this.fieldMetas = [];
+
     for (let i = 0; i < numberOfFields; i++) {
       this.fields[i] = Field.Empty;
+      this.fieldMetas[i] = new FieldMeta();
     }
+
   }
 
   get(x: number, y: number): Field {
     return this.fields[this.positionToIndex(x, y)];
+  }
+
+  getFieldMeta(x: number, y: number): FieldMeta {
+    return this.fieldMetas[this.positionToIndex(x, y)];
   }
 
   set(x: number, y: number, field: Field): void {
