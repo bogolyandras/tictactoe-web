@@ -40,16 +40,20 @@ export class Board {
 
   set(x: number, y: number, field: Field): void {
     if (this.lastFieldChangeActivated()) {
-      this.fieldMetas[this.positionToIndex(x, y)].recentlyChecked = false;
+      this.fieldMetas[this.positionToIndex(this.lastFieldX, this.lastFieldY)].recentlyChecked = false;
       this.listeners.forEach(listener => listener.onFieldChange(
         this.lastFieldX, this.lastFieldY,
         this.fields[this.positionToIndex(this.lastFieldX, this.lastFieldY)],
         this.fieldMetas[this.positionToIndex(this.lastFieldX, this.lastFieldY)]
       ));
     }
+
     this.fields[this.positionToIndex(x, y)] = field;
     this.fieldMetas[this.positionToIndex(x, y)].recentlyChecked = true;
     this.listeners.forEach(listener => listener.onFieldChange(x, y, field, this.fieldMetas[this.positionToIndex(x, y)]));
+
+    this.lastFieldX = x;
+    this.lastFieldY = y;
   }
 
   registerListener(listener: BoardChangeListener): void {

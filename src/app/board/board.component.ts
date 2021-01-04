@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Board, BoardChangeListener} from '../../logic/board';
 import {FieldClickEvent} from '../field/field.component';
 import {Field, FieldMeta} from '../../logic/field';
@@ -6,46 +6,50 @@ import {Field, FieldMeta} from '../../logic/field';
 @Component({
   selector: 'app-board',
   template: `
-    <div>
-      <ul>
-        <li *ngFor="let fieldY of localFields; index as y">
-          <ul>
-            <li [class.field]="field" *ngFor="let field of fieldY; index as x">
-              <app-field
+    <table [style.width]="width + 'px'" [style.height]="height + 'px'">
+      <tbody>
+        <tr *ngFor="let fieldY of localFields; index as y">
+          <td *ngFor="let field of fieldY; index as x">
+            <app-field
                 [State]="field.field"
                 [Meta]="field.meta"
                 [X]="x" [Y]="y"
                 (fieldClicked)="fieldClickListened($event)">
-              </app-field>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </div>
+            </app-field>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   `,
   styles: [`
-    div {
-      position: absolute;
+
+    table {
+      empty-cells: show;
     }
-    * {
-      margin: 0;
-      padding: 0;
-    }
-    ul {
-      list-style-type: none;
-    }
-    li.field {
-      display: inline-block;
-      width: 32px;
-      height: 32px;
+
+    td {
       border-left: 1px solid #73AD21;
       border-top: 1px solid #73AD21;
+      vertical-align: center;
+      justify-content: center;
+      align-content: center;
     }
+
+    app-field {
+      display: block;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+    }
+
   `]
 })
 export class BoardComponent implements OnInit, OnDestroy, BoardChangeListener {
 
-  board: Board;
+  private board: Board;
+
+  @Input() width = 1000;
+  @Input() height = 650;
 
   /**
    * Local copy of the board fields
@@ -64,7 +68,6 @@ export class BoardComponent implements OnInit, OnDestroy, BoardChangeListener {
   }
 
   ngOnInit(): void {
-    console.log('registered');
     this.board.registerListener(this);
   }
 

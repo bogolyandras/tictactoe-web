@@ -5,16 +5,13 @@ import {Field, FieldMeta} from '../../logic/field';
 @Component({
   selector: 'app-field',
   template: `
-    <span (click)="processFieldClick()" [classList]=ClassNames>
-      {{TransposedValue}}
-    </span>
+    <div (click)="processFieldClick()" [classList]=ClassNames>{{TransposedValue}}</div>
   `,
   styles: [`
-    span {
-      display: block;
-      overflow: auto;
+    div {
       cursor: pointer;
     }
+
     .relatedToWinningCross {
       background-color: yellow;
     }
@@ -65,7 +62,6 @@ export class FieldComponent implements OnInit, OnChanges {
       } else if (propName === 'Meta') {
         if (this.Meta.recentlyChecked) {
           this.ClassNames.push('recentlyChecked');
-          console.log('yeaahhh');
         } else {
           this.ClassNames.forEach( (item, index) => {
             if (item === 'recentlyChecked') { this.ClassNames.splice(index, 1); }
