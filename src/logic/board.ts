@@ -5,8 +5,13 @@ export class Board {
   readonly sizeX: number;
   readonly sizeY: number;
 
-  fields: Field[];
-  fieldMetas: FieldMeta[];
+  readonly fields: Field[];
+  readonly fieldMetas: FieldMeta[];
+
+  private lastFieldX = -1;
+  private lastFieldY = -1;
+
+  private listeners = new Set<BoardChangeListener>();
 
   constructor(sizeX: number, sizeY: number) {
 
@@ -34,7 +39,29 @@ export class Board {
   }
 
   set(x: number, y: number, field: Field): void {
+    if (this.lastFieldChangeActivated()) {
+      this.fieldMetas[this.positionToIndex(x, y)].recentlyChecked = false;
+      this.listeners.forEach(listener => listener.onFieldChange(
+        this.lastFieldX, this.lastFieldY,
+        this.fields[this.positionToIndex(this.lastFieldX, this.lastFieldY)],
+        this.fieldMetas[this.positionToIndex(this.lastFieldX, this.lastFieldY)]
+      ));
+    }
     this.fields[this.positionToIndex(x, y)] = field;
+    this.fieldMetas[this.positionToIndex(x, y)].recentlyChecked = true;
+    this.listeners.forEach(listener => listener.onFieldChange(x, y, field, this.fieldMetas[this.positionToIndex(x, y)]));
+  }
+
+  registerListener(listener: BoardChangeListener): void {
+    this.listeners.add(listener);
+  }
+
+  removeListener(listener: BoardChangeListener): void {
+    this.listeners.delete(listener);
+  }
+
+  private lastFieldChangeActivated(): boolean {
+    return this.lastFieldX > -1 && this.lastFieldY > -1;
   }
 
   private positionToIndex(x: number, y: number): number {
@@ -46,5 +73,11 @@ export class Board {
     }
     return y * this.sizeX + x;
   }
+
+}
+
+export interface BoardChangeListener {
+
+  onFieldChange(x: number, y: number, field: Field, meta: FieldMeta): void;
 
 }
